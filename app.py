@@ -11,6 +11,14 @@ mental_custody = mental_obs_custody['CUSTODY_LEVEL'].value_counts(normalize=Fals
 label = mental_custody.index.tolist()
 value = mental_custody['CUSTODY_LEVEL'].tolist()
 
+df = df.replace(to_replace='W',value='White')
+df = df.replace(to_replace='B',value='Black')
+df = df.replace(to_replace='O',value='Other Pacific Islander')
+df = df.replace(to_replace='A',value='Asian')
+df = df.replace(to_replace='I',value='Indian')
+df = df.replace(to_replace='U',value='Alaska Native')
+
+
 mental = df[(df['BRADH'] == 'Y') & (df['CUSTODY_LEVEL'])]
 mental_custody_level = mental['CUSTODY_LEVEL'].value_counts(normalize=False).to_frame()
 mlabel = mental_custody_level.index.tolist()
@@ -123,6 +131,21 @@ app.layout = html.Div(children=[
                                layout=go.Layout(
                                    title='Inmates with a Gang Affiliation According to Race')
                            )),
+  dcc.Graph(
+        id='race-graph',
+        figure={
+            'data': [
+                {'x': rlabels, 'y': rvalues, 'type': 'line', 'name': 'Race'},
+                {'x': ralabels, 'y': ravalues, 'type': 'line', 'name': 'Races in Gangs'},
+                
+            ],
+            'layout': {
+                'title': 'Representation of Races in Prison and in Gangs',
+                'tickformat': '%'
+                
+            }
+        }
+    ),
 
 ])
 
